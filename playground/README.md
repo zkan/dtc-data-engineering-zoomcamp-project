@@ -2,6 +2,14 @@
 
 Credit: https://github.com/openraildata/td-example-python3
 
+## Getting Started
+
+```sh
+python -m venv ENV
+source ENV/bin/activate
+pip install -r requirements.txt
+```
+
 For Mac users, see [this
 issue](https://github.com/jasonrbriggs/stomp.py/issues/391) if you found this
 error below.

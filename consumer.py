@@ -56,8 +56,9 @@ while True:
         with open(f"tmp/{filename}", "w") as f:
             f.write(json.dumps(body))
 
+        key = f"year={uk_year}/month={uk_month:02}/day={uk_day:02}/{filename}"
         s3.Bucket(S3_BUCKET).upload_file(
             f"tmp/{filename}",
-            f"year={uk_year}/month={uk_month}/day={uk_day}/{filename}",
+            key,
         )
         print(header["msg_type"], body["event_type"], body["toc_id"], body["variation_status"], uk_datetime)

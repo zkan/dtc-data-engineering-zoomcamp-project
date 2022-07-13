@@ -31,6 +31,7 @@ python get_network_rail_movements.py
 
 ### Services
 
+* Confluent Control Center: http://localhost:9021
 * Airflow UI: http://localhost:8080
 * MinIO Console: http://localhost:9001
 

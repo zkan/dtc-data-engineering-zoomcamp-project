@@ -1,12 +1,21 @@
 import json
+import socket
 from datetime import datetime
+from pytz import timezone
 from time import sleep
 
 import stomp
-from pytz import timezone
+from confluent_kafka import Producer
 
 
 TIMEZONE_LONDON: timezone = timezone("Europe/London")
+
+topic = "public.networkrail.movement"
+conf = {
+    "bootstrap.servers": "localhost:9092",
+    "client.id": socket.gethostname(),
+}
+producer = Producer(conf)
 
 
 class Listener(stomp.ConnectionListener):
@@ -22,14 +31,16 @@ class Listener(stomp.ConnectionListener):
 
         for message in parsed_body:
             header = message["header"]
-            message_type = header["msg_type"]
-            body = message["body"]
-            if message_type == "0003":
-                timestamp = int(body["actual_timestamp"]) / 1000
-                utc_datetime = datetime.utcfromtimestamp(timestamp)
-                uk_datetime = TIMEZONE_LONDON.fromutc(utc_datetime)
+            msg_type = header["msg_type"]
+            msg_queue_timestamp = header["msg_queue_timestamp"]
+            timestamp = int(msg_queue_timestamp) / 1000
+            utc_datetime = datetime.utcfromtimestamp(timestamp)
+            uk_datetime = TIMEZONE_LONDON.fromutc(utc_datetime)
+            
+            producer.produce(topic, json.dumps(message))
+            producer.flush()
 
-                print(header["msg_type"], body["event_type"], body["toc_id"], body["variation_status"], uk_datetime)
+            print(f"{uk_datetime} - Produced a message type of {msg_type} successfully")
 
 
 if __name__ == "__main__":

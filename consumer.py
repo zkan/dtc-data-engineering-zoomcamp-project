@@ -58,6 +58,6 @@ while True:
 
         s3.Bucket(S3_BUCKET).upload_file(
             f"tmp/{filename}",
-            f"{uk_year}/{uk_month}/{uk_day}/{filename}",
+            f"year={uk_year}/month={uk_month}/day={uk_day}/{filename}",
         )
         print(header["msg_type"], body["event_type"], body["toc_id"], body["variation_status"], uk_datetime)

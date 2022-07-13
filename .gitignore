@@ -167,3 +167,6 @@ cython_debug/
 
 # VIM
 *.swp
+
+# Project
+secrets.json

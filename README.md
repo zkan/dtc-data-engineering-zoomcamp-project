@@ -2,6 +2,12 @@
 
 ## Getting Started
 
+### Services
+
+* Confluent Control Center: http://localhost:9021
+* Airflow UI: http://localhost:8080
+* MinIO Console: http://localhost:9001
+
 To start all services:
 
 ```sh
@@ -46,11 +52,20 @@ export $(cat .env)
 python consumer.py
 ```
 
-### Services
+## Airflow S3 Connection to MinIO
 
-* Confluent Control Center: http://localhost:9021
-* Airflow UI: http://localhost:8080
-* MinIO Console: http://localhost:9001
+- Connection Name: `minio` or any name you like
+- Connection Type: S3
+- Login: `<replace_here_with_your_minio_access_key>`
+- Password: `<replace_here_with_your_minio_secret_key>`
+- Extra: a JSON object with the following properties:
+  ```json
+  {
+    "host": "http://minio:9000"
+  }
+  ```
+
+**Note:** If we were using AWS S3, we don't need to specify the host in the extra.
 
 ## References
 

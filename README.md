@@ -27,8 +27,23 @@ pip install -r requirements.txt
 
 We'll need to install the Apache Kafka C/C++ Library named [librdkafka](https://github.com/edenhill/librdkafka) too.
 
+To get the NetworkRail data and produce messages to Kafka:
+
 ```sh
 python get_networkrail_movements.py
+```
+
+To consume the messages from Kafka:
+
+```sh
+cp env.example .env
+```
+
+Save your AWS access key ID and AWS secret access key from MinIO to the file `.env`.
+
+```sh
+export $(cat .env)
+python consumer.py
 ```
 
 ### Services

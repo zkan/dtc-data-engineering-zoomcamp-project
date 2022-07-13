@@ -49,9 +49,9 @@ cleaned and transformed, we can monitor and analyze the data on a dashboard
 | Name | Description |
 | - | - |
 | `mnt/dags/load_networkrail_movement_data_to_bigquery.py` | An Airflow DAG file that runs the ETL data pipeline on Network Rail train movement data and load them to BigQuery |
-| `networkrail` | A dbt project used to clean and transform the train movement data |
-| `playground` | A folder that contains code for testing ideas |
-| `terraform` | A Terraform project used to provision the Google BigQuery dataset |
+| `networkrail/` | A dbt project used to clean and transform the train movement data |
+| `playground/` | A folder that contains code for testing ideas |
+| `terraform/` | A Terraform project used to provision the Google BigQuery dataset |
 | `.env.example` | A environment example file that contains the environment variables we use in this project |
 | `docker-compose.yaml` | A Docker Compose file that runs the Confluent platform (Kafka and friends), an Airflow instance, and MinIO |
 | `Makefile` | A Makefile file for running commands |

@@ -49,7 +49,7 @@ Save your AWS access key ID and AWS secret access key from MinIO to the file `.e
 
 ```sh
 export $(cat .env)
-python consumer.py
+python consume_networkrail_movements_to_data_lake.py
 ```
 
 ## Airflow S3 Connection to MinIO

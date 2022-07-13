@@ -12,9 +12,20 @@
 
 ![Project Overview](./img/dtc-data-engineering-zoomcamp-project-overview.png)
 
-This project builds an automated data pipeline that aims to get the livestream of train movement data and analyze the train operating company's performance. The source of streaming data comes from the [UK's Network Rail company](https://datafeeds.networkrail.co.uk) provided through an ActiveMQ interface. A train movement message is sent whenever a train arrives, passes or departs a location. It records the time at which the event happens.
+This project builds an automated data pipeline that aims to get the livestream
+of train movement data and analyze the train operating company's performance.
+The source of streaming data comes from the [UK's Network Rail
+company](https://datafeeds.networkrail.co.uk) provided through an ActiveMQ
+interface. A train movement message is sent whenever a train arrives, passes or
+departs a location. It records the time at which the event happens.
 
-We first extract the live stream of train movement messages from the ActiveMQ endpoint and stream the messages into Kafka. We then consume and put them into a data lake (MinIO). After that we schedule a data pipeline (Airflow) to run daily to load the data to a data warehouse (Google BigQuery). Later on, we transform the data in the warehouse using dbt. Finally, once the data is cleaned and transformed, we can monitor and analyze the data on a dashboard (Google Data Studio).
+We first extract the live stream of train movement messages from the ActiveMQ
+endpoint and stream the messages into Kafka. We then consume and put them into
+a data lake (MinIO). After that we schedule a data pipeline (Airflow) to run
+daily to load the data to a data warehouse (Google BigQuery). Later on, we
+transform the data in the warehouse using dbt. Finally, once the data is
+cleaned and transformed, we can monitor and analyze the data on a dashboard
+(Google Data Studio).
 
 ## Dataset
 
@@ -24,14 +35,14 @@ We first extract the live stream of train movement messages from the ActiveMQ en
 
 ## Technologies
 
-* Apache Airflow for orchestrating workflow
-* Apache Kafka for stream processing
-* MinIO for data lake storage
-* dbt for data transformation
-* Google BigQuery for data warehousing and analysis
-* Google Data Studio for dashboard
-* Terraform for provisioning BigQuery dataset
-* Docker for running services on local machine
+* [Apache Airflow](https://airflow.apache.org/) for orchestrating workflow
+* [Apache Kafka](https://kafka.apache.org/) for stream processing
+* [MinIO](https://min.io/) for data lake storage
+* [dbt](https://www.getdbt.com/) for data transformation
+* [Google BigQuery](https://cloud.google.com/bigquery) for data warehousing and analysis
+* [Google Data Studio](https://datastudio.google.com/overview) for dashboard
+* [Terraform](https://www.terraform.io/) for provisioning BigQuery dataset
+* [Docker](https://www.docker.com/) for running services on local machine
 
 ## Files and What They Do
 
@@ -60,7 +71,9 @@ We first extract the live stream of train movement messages from the ActiveMQ en
 
 ### Starting the Project
 
-Before we can get the NetworkRail data feed, we'll need to register a new account on [the NetworkRail website](https://datafeeds.networkrail.co.uk/) first.
+Before we can get the NetworkRail data feed, we'll need to register a new
+account on [the NetworkRail website](https://datafeeds.networkrail.co.uk/)
+first.
 
 To start all services:
 
@@ -77,7 +90,8 @@ source ENV/bin/activate
 pip install -r requirements.txt
 ```
 
-Note that we'll need to install the Apache Kafka C/C++ Library named [librdkafka](https://github.com/edenhill/librdkafka) too.
+Note that we'll need to install the Apache Kafka C/C++ Library named
+[librdkafka](https://github.com/edenhill/librdkafka) too.
 
 To get the NetworkRail data and produce messages to the Kafka:
 
@@ -85,13 +99,15 @@ To get the NetworkRail data and produce messages to the Kafka:
 python get_networkrail_movements.py
 ```
 
-Before we can consume the messages from Kafka, we'll need to set up a service account first, so we can put the data into a data lake.
+Before we can consume the messages from Kafka, we'll need to set up a service
+account first, so we can put the data into a data lake.
 
 ```sh
 cp env.example .env
 ```
 
-We then save the AWS access key ID and AWS secret access key from MinIO to the file `.env`.
+We then save the AWS access key ID and AWS secret access key from MinIO to the
+file `.env`.
 
 To consume the messages from Kafka:
 
@@ -100,7 +116,8 @@ export $(cat .env)
 python consume_networkrail_movements_to_data_lake.py
 ```
 
-After that we can go to the Airflow UI to run the data pipeline and wait for the data to show up on the dashboard.
+After that we can go to the Airflow UI to run the data pipeline and wait for
+the data to show up on the dashboard.
 
 To shutdown all services:
 
@@ -124,13 +141,15 @@ The screenshot below shows the data models on Google BigQuery.
 
 ### TOC Performance Dashboard
 
-The screenshot below shows the dashboard to monitor the train operating company's performance.
+The screenshot below shows the dashboard to monitor the train operating
+company's performance.
 
 ![TOC Performance Dashboard](./img/toc-performance-dashboard.png)
 
 ### Steps to Set Up a Service Account on MinIO
 
-The screenshots below show how to set up a service account on MinIO. Airflow needs it in order to get data from the MinIO storage.
+The screenshots below show how to set up a service account on MinIO. Airflow
+needs it in order to get data from the MinIO storage.
 
 ![Set up a Service Account on MinIO 1](./img/minio-set-up-service-account-01.png)
 
@@ -157,7 +176,9 @@ The screenshots below show how to set up a service account on MinIO. Airflow nee
 
 ### Steps to Set Up a Service Account on Google Cloud Platform (GCP)
 
-The screenshots belwo show how to set up a service account on GCP. This service account is required for Airflow to load data to the BigQuery as well as dbt to transform data in the BigQuery.
+The screenshots belwo show how to set up a service account on GCP. This service
+account is required for Airflow to load data to the BigQuery as well as dbt to
+transform data in the BigQuery.
 
 ![Set up a Service Account on GCP 1](./img/gcp-set-up-service-account-01.png)
 

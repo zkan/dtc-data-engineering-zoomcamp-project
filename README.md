@@ -12,9 +12,9 @@
 
 ![Project Overview](./img/dtc-data-engineering-zoomcamp-project-overview.png)
 
-This project builds an automated data pipeline that aims to get the livestream
-of train movement data and analyze the train operating company's performance.
-The source of streaming data comes from the [UK's Network Rail
+This project builds an automated end-to-end data pipeline that aims to get the
+livestream of train movement data and analyze the train operating company's
+performance.  The source of streaming data comes from the [UK's Network Rail
 company](https://datafeeds.networkrail.co.uk) provided through an ActiveMQ
 interface. A train movement message is sent whenever a train arrives, passes or
 departs a location. It records the time at which the event happens.

@@ -170,3 +170,4 @@ cython_debug/
 
 # Project
 secrets.json
+tmp/

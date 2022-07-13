@@ -5,16 +5,21 @@ models:
   - name: operating_company_performance
     description: Performance of each operating company
     columns:
-      - name: address_guid
-        description: UUID for each unique address on platform
+      - name: actual_timestamp
+        description: The date and time that this event happened at the location
         tests:
           - not_null
-          - unique
-      - name: address
-        description: The first few lines of the address
-      - name: zipcode
-        description: The zipcode of the address
-      - name: state
-        description: State this delivery address is based in
-      - name: country
-        description: Country this delivery address is based in
+      - name: train_operating_company
+        description: Operating company name
+        tests:
+          - not_null
+      - name: variation_status
+        description: One of "ON TIME", "EARLY", "LATE" or "OFF ROUTE"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "ON TIME"
+                - "EARLY"
+                - "LATE"
+                - "OFF ROUTE"

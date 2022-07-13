@@ -7,6 +7,12 @@ models:
     columns:
       - name: event_type
         description: The type of event - either "ARRIVAL" or "DEPARTURE"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "ARRIVAL"
+                - "DEPARTURE"
       - name: gbtt_timestamp
         description: The planned GBTT (passenger) date and time that the event was due to happen at this location
       - name: original_loc_stanox
@@ -45,6 +51,14 @@ models:
         description: Set to "false" if this report is for a location in the schedule, or "true" if it is not
       - name: variation_status
         description: One of "ON TIME", "EARLY", "LATE" or "OFF ROUTE"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "ON TIME"
+                - "EARLY"
+                - "LATE"
+                - "OFF ROUTE"
       - name: train_service_code
         description: Train service code as per schedule
       - name: toc_id

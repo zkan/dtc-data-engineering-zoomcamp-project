@@ -32,3 +32,8 @@ try_setsockopt() missing 1 required positional argument: 'val'
     ```py
     def try_setsockopt(sock, name, fam, opt, val=None)
     ```
+
+## References
+
+* [Quick Start for Confluent
+  Platform](https://docs.confluent.io/platform/current/quickstart/ce-docker-quickstart.html)

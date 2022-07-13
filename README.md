@@ -125,6 +125,12 @@ To shutdown all services:
 make down
 ```
 
+### Kafka Topic on Confluent Control Center
+
+The screenshot below shows the Kafka topic on Confluent control center.
+
+![Kafka Topic on Confluent Control Center](./img/kafka-topic-on-confluent-control-center.png)
+
 ### Data Pipeline on Airflow
 
 The screenshots below show the data pipeline on Airflow.

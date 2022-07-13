@@ -15,6 +15,8 @@ To shutdown all services:
 make down
 ```
 
+Before we get the networkrail data feed, we'll need to register on [the NetworkRail website](https://datafeeds.networkrail.co.uk/) first.
+
 To start the project:
 
 ```sh
@@ -26,7 +28,7 @@ pip install -r requirements.txt
 We'll need to install the Apache Kafka C/C++ Library named [librdkafka](https://github.com/edenhill/librdkafka) too.
 
 ```sh
-python get_network_rail_movements.py
+python get_networkrail_movements.py
 ```
 
 ### Services

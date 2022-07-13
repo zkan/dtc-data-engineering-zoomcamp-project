@@ -34,5 +34,13 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   networkrail:
     # Config indicated by + and applies to all files under models/example/
-    example:
+    staging:
+      +enabled: true
       +materialized: view
+      +schema: staging
+    
+    marts:
+      +enabled: true
+      +materialized: view
+      core:
+        +schema: reporting

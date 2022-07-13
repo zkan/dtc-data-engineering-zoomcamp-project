@@ -1,0 +1,20 @@
+version: 2
+
+models:
+
+  - name: operating_company_performance
+    description: Performance of each operating company
+    columns:
+      - name: address_guid
+        description: UUID for each unique address on platform
+        tests:
+          - not_null
+          - unique
+      - name: address
+        description: The first few lines of the address
+      - name: zipcode
+        description: The zipcode of the address
+      - name: state
+        description: State this delivery address is based in
+      - name: country
+        description: Country this delivery address is based in

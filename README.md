@@ -7,6 +7,7 @@
 * [Technologies](#technologies)
 * [Files and What They Do](#files-and-what-they-do)
 * [Instruction on Running the Project](#instruction-on-running-the-project)
+* [References](#references)
 
 ## Project Overview
 
@@ -17,19 +18,20 @@ livestream of train movement data and analyze the train operating company's
 performance.  The source of streaming data comes from the [UK's Network Rail
 company](https://datafeeds.networkrail.co.uk) provided through an ActiveMQ
 interface. A train movement message is sent whenever a train arrives, passes or
-departs a location. It records the time at which the event happens.
+departs a location. It also records the time at which the event happens.
 
-We first extract the live stream of train movement messages from the ActiveMQ
-endpoint and stream the messages into Kafka. We then consume and put them into
-a data lake (MinIO). After that we schedule a data pipeline (Airflow) to run
-daily to load the data to a data warehouse (Google BigQuery). Later on, we
-transform the data in the warehouse using dbt. Finally, once the data is
-cleaned and transformed, we can monitor and analyze the data on a dashboard
-(Google Data Studio).
+In this project, we first extract the live stream of train movement messages
+from the Network Rail's ActiveMQ endpoint and stream the messages into Kafka.
+We then consume and put them into a data lake (MinIO). After that we schedule a
+data pipeline (Airflow) to run daily to load the data to a data warehouse
+(Google BigQuery). Later on, we transform the data in the warehouse using dbt.
+Finally, once the data is cleaned and transformed, we can monitor and analyze
+the data on a dashboard (Google Data Studio).
 
 ## Dataset
 
-[Network Rail](https://datafeeds.networkrail.co.uk)
+In this project, our dataset is the public data feed provided by [Network
+Rail](https://datafeeds.networkrail.co.uk).
 
 ![Network Rail feed](./img/networkrail-feed.png)
 
@@ -63,26 +65,33 @@ cleaned and transformed, we can monitor and analyze the data on a dashboard
 
 ## Instruction on Running the Project
 
-### Services
+Here is the list of services we use in this project:
 
 * Confluent Control Center: http://localhost:9021
 * Airflow UI: http://localhost:8080
 * MinIO Console: http://localhost:9001
 
-### Starting the Project
-
-Before we can get the NetworkRail data feed, we'll need to register a new
-account on [the NetworkRail website](https://datafeeds.networkrail.co.uk/)
-first.
-
-To start all services:
+We can start all services by running the commands below:
 
 ```sh
 make setup
 make up
 ```
 
-To set up a virtual environment and install package dependencies:
+To shutdown all services, run:
+
+```sh
+make down
+```
+
+### Getting Started
+
+Before we can get the Network Rail data feed, we'll need to register a new
+account on [the Network Rail website](https://datafeeds.networkrail.co.uk/)
+first.
+
+After we have the account, let's set up a virtual environment and install
+package dependencies:
 
 ```sh
 python -m venv ENV
@@ -90,40 +99,44 @@ source ENV/bin/activate
 pip install -r requirements.txt
 ```
 
-Note that we'll need to install the Apache Kafka C/C++ Library named
-[librdkafka](https://github.com/edenhill/librdkafka) too.
+**Note:** We need to install the Apache Kafka C/C++ Library named
+[librdkafka](https://github.com/edenhill/librdkafka) first.
 
-To get the NetworkRail data and produce messages to the Kafka:
+Once we've installed the package dependencies, we can run the following command
+to get the Network Rail livestream data and produce messages to the Kafka:
 
 ```sh
 python get_networkrail_movements.py
 ```
 
-Before we can consume the messages from Kafka, we'll need to set up a service
-account first, so we can put the data into a data lake.
+Before we can consume the messages from Kafka, we need to set up a service
+account on MinIO first, so we can put the data into a data lake. Please see the
+[Steps to Set Up a Service Account on
+MinIO](#steps-to-set-up-a-service-account-on-minio) section.
+
+After we have the service account, we'll save the AWS access key ID and AWS
+secret access key from MinIO to the file `.env`. Here we have an example env
+file, so we can use it as a template.
 
 ```sh
 cp env.example .env
 ```
 
-We then save the AWS access key ID and AWS secret access key from MinIO to the
-file `.env`.
-
-To consume the messages from Kafka:
+To consume the messages from Kafka, run the following commands:
 
 ```sh
 export $(cat .env)
 python consume_networkrail_movements_to_data_lake.py
 ```
 
-After that we can go to the Airflow UI to run the data pipeline and wait for
-the data to show up on the dashboard.
+All the messages should be in the data lake (MinIO) by now.
 
-To shutdown all services:
+We can go to the Airflow UI and manually trigger the data pipeline to load the
+data to the data warehouse (Google BigQuery) then wait for the data to show up
+on the dashboard (Google Data Studio). See the live dashboard
+[here](https://datastudio.google.com/reporting/5d38cb3d-248e-4aed-b65f-0db54fab4b9d).
 
-```sh
-make down
-```
+## References
 
 ### Kafka Topic on Confluent Control Center
 
@@ -139,32 +152,6 @@ The screenshots below show the data pipeline on Airflow.
 
 ![Data Pipeline on Airflow 2](./img/airflow-data-pipeline-02.png)
 
-### Data Models on Google BigQuery
-
-The screenshot below shows the data models on Google BigQuery.
-
-![Data Models on Google BigQuery](./img/data-models-on-bigquery.png)
-
-### TOC Performance Dashboard
-
-The screenshot below shows the dashboard to monitor the train operating
-company's performance.
-
-![TOC Performance Dashboard](./img/toc-performance-dashboard.png)
-
-### Steps to Set Up a Service Account on MinIO
-
-The screenshots below show how to set up a service account on MinIO. Airflow
-needs it in order to get data from the MinIO storage.
-
-![Set up a Service Account on MinIO 1](./img/minio-set-up-service-account-01.png)
-
-![Set up a Service Account on MinIO 2](./img/minio-set-up-service-account-02.png)
-
-![Set up a Service Account on MinIO 3](./img/minio-set-up-service-account-03.png)
-
-![Set up a Service Account on MinIO 4](./img/minio-set-up-service-account-04.png)
-
 ### Airflow S3 Connection to MinIO
 
 - Connection Name: `minio` or any name you like
@@ -179,6 +166,35 @@ needs it in order to get data from the MinIO storage.
   ```
 
 **Note:** If we were using AWS S3, we don't need to specify the host in the extra.
+
+### Data Models on Google BigQuery
+
+The screenshot below shows the data models on Google BigQuery.
+
+![Data Models on Google BigQuery](./img/data-models-on-bigquery.png)
+
+### Network Rail TOC's Performance Dashboard
+
+The screenshot below shows the dashboard to monitor the Network Rail train
+operating company (TOC)'s performance. View the live dashboard here: [Network
+Rail Train Operating Company's
+Performance](https://datastudio.google.com/reporting/5d38cb3d-248e-4aed-b65f-0db54fab4b9d).
+
+![Network Rail TOC's Performance Dashboard](./img/toc-performance-dashboard.png)
+
+
+### Steps to Set Up a Service Account on MinIO
+
+The screenshots below show how to set up a service account on MinIO. Airflow
+needs it in order to get data from the MinIO storage.
+
+![Set up a Service Account on MinIO 1](./img/minio-set-up-service-account-01.png)
+
+![Set up a Service Account on MinIO 2](./img/minio-set-up-service-account-02.png)
+
+![Set up a Service Account on MinIO 3](./img/minio-set-up-service-account-03.png)
+
+![Set up a Service Account on MinIO 4](./img/minio-set-up-service-account-04.png)
 
 ### Steps to Set Up a Service Account on Google Cloud Platform (GCP)
 
